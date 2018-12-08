@@ -12,10 +12,13 @@ import {
   Quote,
   Slide,
   Text,
+  Image,
+  Notes,
 } from 'spectacle';
 
 // Import theme
 import createTheme from 'spectacle/lib/themes/default';
+import LOLWUT from '../assets/lolwut.png';
 
 // Require CSS
 require('normalize.css');
@@ -36,57 +39,55 @@ const theme = createTheme(
 export default class Presentation extends React.Component {
   render() {
     return (
-      <Deck
-        transition={['zoom', 'slide']}
-        transitionDuration={500}
-        theme={theme}
-      >
-        <Slide transition={['zoom']} bgColor="primary">
-          <Heading size={1} fit caps lineHeight={1} textColor="secondary">
-            Spectacle Boilerplate
-          </Heading>
-          <Text margin="10px 0 0" textColor="tertiary" size={1} fit bold>
-            open the presentation/index.js file to get started
-          </Text>
+      <Deck transitionDuration={250} transition={['fade']} theme={theme}>
+        <Slide>
+          <em>internal screaming</em>
         </Slide>
-        <Slide transition={['fade']} bgColor="tertiary">
-          <Heading size={6} textColor="primary" caps>
-            Typography
-          </Heading>
-          <Heading size={1} textColor="secondary">
-            Heading 1
-          </Heading>
-          <Heading size={2} textColor="secondary">
-            Heading 2
-          </Heading>
-          <Heading size={3} textColor="secondary">
-            Heading 3
-          </Heading>
-          <Heading size={4} textColor="secondary">
-            Heading 4
-          </Heading>
-          <Heading size={5} textColor="secondary">
-            Heading 5
-          </Heading>
-          <Text size={6} textColor="secondary">
-            Standard text
-          </Text>
-        </Slide>
-        <Slide transition={['fade']} bgColor="primary" textColor="tertiary">
-          <Heading size={6} textColor="secondary" caps>
-            Standard List
-          </Heading>
+
+        <Slide>
+          <Heading size={3}>Other nominations</Heading>
+
           <List>
-            <ListItem>Item 1</ListItem>
-            <ListItem>Item 2</ListItem>
-            <ListItem>Item 3</ListItem>
-            <ListItem>Item 4</ListItem>
+            <ListItem>Why Lua is Great</ListItem>
+            <ListItem>A basic introduction to Rust</ListItem>
+            <ListItem>A thorough analysis of the Taco Bell menu</ListItem>
+            <ListItem>
+              Why 3rd dimensional tabular databases manifest actual lizard
+              people
+            </ListItem>
           </List>
         </Slide>
-        <Slide transition={['fade']} bgColor="secondary" textColor="primary">
+
+        <Slide>
+          <Heading size={3}>CRDTs</Heading>
+
+          <Text>&nbsp;</Text>
+
+          <Notes>A recurring hobby</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>CRDTs</Heading>
+
+          <Text>(see-are-dee-tees)</Text>
+
+          <Notes>But first, why.</Notes>
+        </Slide>
+
+        <Slide>
+          <Image src={LOLWUT} height={300} />
+
+          <Notes>Any questions?</Notes>
+        </Slide>
+
+        <Slide bgColor="secondary" textColor="primary">
           <BlockQuote>
-            <Quote>Example Quote</Quote>
-            <Cite>Author</Cite>
+            <Quote>
+              You may worship C, A, or P. Choose up to two. P smites all
+              non-followers at random intervals.
+            </Quote>
+
+            <Cite>Someone on twitter</Cite>
           </BlockQuote>
         </Slide>
       </Deck>
