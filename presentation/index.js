@@ -1,27 +1,21 @@
-// Import React
 import React from 'react';
 
-// Import Spectacle Core tags
+import createTheme from 'spectacle/lib/themes/default';
+import LOLWUT from '../assets/lolwut.png';
+import 'normalize.css';
 import {
   BlockQuote,
-  Cite,
+  Appear,
+  CodePane,
   Deck,
   Heading,
   ListItem,
   List,
-  Quote,
   Slide,
   Text,
   Image,
   Notes,
 } from 'spectacle';
-
-// Import theme
-import createTheme from 'spectacle/lib/themes/default';
-import LOLWUT from '../assets/lolwut.png';
-
-// Require CSS
-require('normalize.css');
 
 const theme = createTheme(
   {
@@ -83,10 +77,21 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
-          <Text>Rules for collaborating on shared state</Text>
-          <Text>&nbsp;</Text>
-          <Text>Servers optional</Text>
-          <Notes>They don't need coordination or a centralized server.</Notes>
+          <Text>Rules for collaborating on shared mutable state</Text>
+          <Appear>
+            <div>
+              <Text>&nbsp;</Text>
+              <Text>Servers optional</Text>
+            </div>
+          </Appear>
+          <Notes>
+            Shared state: postgres. Users collaboratively mutate it with
+            PUT/POST/PATCH.
+          </Notes>
+        </Slide>
+
+        <Slide bgColor="secondary">
+          <Text textColor="primary">Every client has their own replica</Text>
         </Slide>
 
         <Slide>
@@ -111,6 +116,38 @@ export default class Presentation extends React.Component {
           </Notes>
         </Slide>
 
+        <Slide>
+          <Heading size={1}>&lt;/hype&gt;</Heading>
+          <Notes>Now to the implementation.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Categories</Heading>
+          <List>
+            <ListItem>Operation based</ListItem>
+            <ListItem>State based</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Heading size={6}>State-based merge function</Heading>
+          <CodePane
+            source="merge(yourState, theirState) // newState"
+            lang="js"
+          />
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Categories</Heading>
+          <List>
+            <ListItem>Operation based</ListItem>
+            <ListItem>State based</ListItem>
+            <Appear>
+              <ListItem>Delta-state</ListItem>
+            </Appear>
+          </List>
+        </Slide>
+
         {/*
          * CRDT implementation details
          */}
@@ -122,11 +159,14 @@ export default class Presentation extends React.Component {
 
         <Slide bgColor="secondary" textColor="primary">
           <BlockQuote>
-            <Quote>
+            <Text textColor="primary">
               You may worship C, A, or P. Choose up to two. P smites all
               non-followers at random intervals.
-            </Quote>
-            <Cite>Someone on twitter</Cite>
+            </Text>
+            <Text>&nbsp;</Text>
+            <Text textColor="tertiary">
+              <em>- Someone on twitter</em>
+            </Text>
           </BlockQuote>
         </Slide>
       </Deck>
