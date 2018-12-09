@@ -15,6 +15,7 @@ import {
   Text,
   Image,
   Notes,
+  Code,
 } from 'spectacle';
 
 const theme = createTheme(
@@ -155,7 +156,7 @@ export default class Presentation extends React.Component {
           <Heading size={6}>Operation-based merge</Heading>
           <CodePane
             source="yourState = merge(yourState, operation)"
-            textSize={25}
+            textSize={30}
             theme="light"
             lang="js"
           />
@@ -163,7 +164,7 @@ export default class Presentation extends React.Component {
           <Heading size={6}>State-based merge</Heading>
           <CodePane
             source="yourState = merge(yourState, theirState)"
-            textSize={25}
+            textSize={30}
             theme="light"
             lang="js"
           />
@@ -183,6 +184,109 @@ export default class Presentation extends React.Component {
 
         {/*
          * CRDT implementation details
+         */}
+
+        <Slide>
+          <Heading size={1}>Rules</Heading>
+          <Text>
+            Making a well-behaved <Code>merge(...)</Code> function
+          </Text>
+          <Notes>Let's talk about constraints.</Notes>
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            Commutative
+          </Heading>
+          <Text textColor="primary">
+            <Code textColor="primary">merge(...)</Code> can't depend on order of
+            updates
+          </Text>
+          <br />
+          <CodePane
+            source={
+              'merge(merge(state, update1), update2)\n// is equal to...\nmerge(merge(state, update2), update1)'
+            }
+            textSize={30}
+            lang="js"
+          />
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            Associative
+          </Heading>
+          <Text textColor="primary">
+            Usually goes hand-in-hand with commutativity
+          </Text>
+          <Notes>Unless you're building rock-paper-scissors...</Notes>
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            Idempotent
+          </Heading>
+          <Text textColor="primary">
+            Applying an update more than once should have no effect.
+          </Text>
+          <br />
+          <CodePane
+            source={
+              'merge(merge(state, update), update)\n// is equal to...\nmerge(state, update)'
+            }
+            textSize={30}
+            lang="js"
+          />
+          <Notes>Usually duplicates are from the network.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Okay, but in practice?</Heading>
+          <br />
+          <Appear>
+            <Code>new Set()</Code>
+          </Appear>
+          <Notes>It's already in your language</Notes>
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            It's commutative
+          </Heading>
+          <br />
+          <CodePane
+            source={
+              'set.add(1).add(2) // {1, 2}\n// is equal to...\nset.add(2).add(1) // {1, 2}'
+            }
+            textSize={30}
+            lang="js"
+          />
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            It's idempotent
+          </Heading>
+          <br />
+          <CodePane
+            source={
+              'set.add(1).add(1).add(1) // {1}\n// is equal to...\nset.add(1) // {1}'
+            }
+            textSize={30}
+            lang="js"
+          />
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>The catch?</Heading>
+          <Text>
+            You can <strong>never</strong> delete.
+          </Text>
+          <Notes>It ruins commutativity. This is known as a G-Set.</Notes>
+        </Slide>
+
+        {/*
+         * Ending
          */}
 
         <Slide>
