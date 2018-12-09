@@ -310,9 +310,67 @@ export default class Presentation extends React.Component {
           <Text>Delete breaks commutativity</Text>
           <br />
           <Image src={SET_DELETE} />
+          <Notes>Add & delete are order-dependent.</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>So no deletes.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>In practice</Heading>
+          <br />
+          <Text>
+            Starting with the simplest example, the <strong>G-Counter</strong>.
+          </Text>
+          <Text>(grow-counter)</Text>
+        </Slide>
+
+        <Slide>
+          <Text>Derive the count by summing all members.</Text>
+          <br />
+          <CodePane
+            source={'set([1, 2, 3, 5]) # sums to 11'}
+            textSize={30}
+            theme="light"
+            lang="python"
+          />
           <Notes>
-            The Delete is just reaching you because of a lagging connection
+            You're not storing the count, you're storing state you can derive
+            your count from. This has an obvious constraint.
           </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>Add an ID to every count</Text>
+          <br />
+          <CodePane
+            source={
+              "# sums to 4\nset([\n  ('id1', -1),\n  ('id2', 3),\n  ('id3', 2),\n])"
+            }
+            textSize={30}
+            theme="light"
+            lang="python"
+          />
+          <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>This is equivalent.</Text>
+          <br />
+          <CodePane
+            source={'# sums to 4\n{\n  id1: -1,\n  id2: 3,\n  id3: 2,\n}'}
+            textSize={30}
+            theme="light"
+            lang="js"
+          />
+          <Notes>Tuples are immutable. This must also be immutable.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>Demo</Heading>
+          <br />
+          <Text>crdt.herokuapp.com/counter</Text>
         </Slide>
 
         {/*
