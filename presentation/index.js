@@ -5,7 +5,6 @@ import SET_DELETE from '../assets/set-delete.svg';
 import LOLWUT from '../assets/lolwut.png';
 import 'normalize.css';
 import {
-  BlockQuote,
   Appear,
   CodePane,
   Deck,
@@ -53,7 +52,9 @@ export default class Presentation extends React.Component {
               people
             </ListItem>
           </List>
-          <Notes>I'll be talking about a recurring hobby</Notes>
+          <Notes>
+            Some look tempting! I'll be talking about a recurring hobby
+          </Notes>
         </Slide>
 
         <Slide>
@@ -194,6 +195,13 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
+          <Text>"Rules for collaborating on shared mutable state"</Text>
+          <Text>- me</Text>
+          <Text>&nbsp;</Text>
+          <Text>Where do these fit in?</Text>
+        </Slide>
+
+        <Slide>
           <Heading size={1}>Rules</Heading>
           <Text>
             Making a well-behaved <Code>merge(...)</Code> function
@@ -255,6 +263,7 @@ export default class Presentation extends React.Component {
             <ListItem>Idempotent</ListItem>
           </List>
           <Text>Gives you a state-based CRDT.</Text>
+          <Notes>That's a lot of words. What's it look like in practice?</Notes>
         </Slide>
 
         <Slide>
@@ -263,7 +272,7 @@ export default class Presentation extends React.Component {
           <Appear>
             <Code>new Set()</Code>
           </Appear>
-          <Notes>It's already in your language</Notes>
+          <Notes>It's already in your language. Why is it a CRDT?</Notes>
         </Slide>
 
         <Slide bgColor="tertiary">
@@ -330,7 +339,7 @@ export default class Presentation extends React.Component {
           <Text>Derive the count by summing all members.</Text>
           <br />
           <CodePane
-            source={'set([1, 2, 3, 5]) # sums to 11'}
+            source={'set([-1, 3, 2]) # sums to 4'}
             textSize={30}
             theme="light"
             lang="python"
@@ -346,7 +355,7 @@ export default class Presentation extends React.Component {
           <br />
           <CodePane
             source={
-              "# sums to 4\nset([\n  ('id1', -1),\n  ('id2', 3),\n  ('id3', 2),\n])"
+              "# sums to 4\nset([\n  ('id1', 1),\n  ('id2', 1),\n  ('id3', 2),\n])"
             }
             textSize={30}
             theme="light"
@@ -359,7 +368,7 @@ export default class Presentation extends React.Component {
           <Text>This is equivalent.</Text>
           <br />
           <CodePane
-            source={'# sums to 4\n{\n  id1: -1,\n  id2: 3,\n  id3: 2,\n}'}
+            source={'# sums to 4\n{\n  id1: 1,\n  id2: 1,\n  id3: 2,\n}'}
             textSize={30}
             theme="light"
             lang="js"
@@ -383,16 +392,14 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide bgColor="secondary" textColor="primary">
-          <BlockQuote>
-            <Text textColor="primary">
-              You may worship C, A, or P. Choose up to two. P smites all
-              non-followers at random intervals.
-            </Text>
-            <Text>&nbsp;</Text>
-            <Text textColor="tertiary">
-              <em>- Someone on twitter</em>
-            </Text>
-          </BlockQuote>
+          <Text textColor="primary">
+            You may worship C, A, or P. Choose up to two. P smites all
+            non-followers at random intervals.
+          </Text>
+          <Text>&nbsp;</Text>
+          <Text textColor="tertiary">
+            <em>- Someone on twitter</em>
+          </Text>
         </Slide>
       </Deck>
     );
