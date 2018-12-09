@@ -1,6 +1,7 @@
 import React from 'react';
 
 import createTheme from 'spectacle/lib/themes/default';
+import SET_DELETE from '../assets/set-delete.svg';
 import LOLWUT from '../assets/lolwut.png';
 import 'normalize.css';
 import {
@@ -99,6 +100,7 @@ export default class Presentation extends React.Component {
           <Appear>
             <Text textColor="primary">All updates are optimistic</Text>
           </Appear>
+          <Notes>Appears: optimistic updates</Notes>
         </Slide>
 
         <Slide bgColor="quaternary">
@@ -109,12 +111,17 @@ export default class Presentation extends React.Component {
           <Heading size={4}>
             {FIRE} divergence {FIRE}
           </Heading>
-          <Text>Clients have radically different states</Text>
+          <Text>
+            Clients have radically different (sometimes invalid) states
+          </Text>
           <List>
             <ListItem>Operations arrive out of order</ListItem>
             <ListItem>Retry logic duplicates operations</ListItem>
           </List>
-          <Notes>You ask 2 replicas you get 2 different answers.</Notes>
+          <Notes>
+            You ask 2 replicas you get 2 different answers. Invalid states from
+            delete & updating.
+          </Notes>
         </Slide>
 
         <Slide>
@@ -241,6 +248,16 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Heading size={3}>All together now</Heading>
+          <List>
+            <ListItem>Commutative</ListItem>
+            <ListItem>Associative</ListItem>
+            <ListItem>Idempotent</ListItem>
+          </List>
+          <Text>Gives you a state-based CRDT.</Text>
+        </Slide>
+
+        <Slide>
           <Heading size={3}>Okay, but in practice?</Heading>
           <br />
           <Appear>
@@ -278,11 +295,24 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Heading size={3}>Grow-only set</Heading>
+          <Text>It's the base of almost every other CRDT</Text>
+        </Slide>
+
+        <Slide>
           <Heading size={3}>The catch?</Heading>
           <Text>
             You can <strong>never</strong> delete.
           </Text>
-          <Notes>It ruins commutativity. This is known as a G-Set.</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>Delete breaks commutativity</Text>
+          <br />
+          <Image src={SET_DELETE} />
+          <Notes>
+            The Delete is just reaching you because of a lagging connection
+          </Notes>
         </Slide>
 
         {/*
