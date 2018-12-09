@@ -2,6 +2,7 @@ import React from 'react';
 
 import createTheme from 'spectacle/lib/themes/default';
 import SET_DELETE from '../assets/set-delete.svg';
+import MOAR_CAT from '../assets/moar-cat.jpg';
 import LOLWUT from '../assets/lolwut.png';
 import 'normalize.css';
 import {
@@ -74,7 +75,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={1}>Context</Heading>
           <Text>need moar</Text>
-          <Notes>Let's build the hype.</Notes>
+          <Notes>What are they do?</Notes>
         </Slide>
 
         {/*
@@ -112,17 +113,19 @@ export default class Presentation extends React.Component {
           <Heading size={4}>
             {FIRE} divergence {FIRE}
           </Heading>
-          <Text>
-            Clients have radically different (sometimes invalid) states
-          </Text>
+          <Text>Clients have radically different states</Text>
           <List>
             <ListItem>Operations arrive out of order</ListItem>
             <ListItem>Retry logic duplicates operations</ListItem>
           </List>
           <Notes>
-            You ask 2 replicas you get 2 different answers. Invalid states from
-            delete & updating.
+            Everyone will derive their state using a different set of
+            operations.
           </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>What about consistency??</Text>
         </Slide>
 
         <Slide>
@@ -139,6 +142,7 @@ export default class Presentation extends React.Component {
           <List>
             <ListItem>Offline friendly</ListItem>
             <ListItem>Blazingly fast</ListItem>
+            <ListItem>Server independent</ListItem>
             <ListItem>Real-time optimized</ListItem>
           </List>
           <Notes>
@@ -154,6 +158,10 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={3}>Categories</Heading>
+          <Text>
+            There are several different types of Conflict-free Replicated Data
+            Types (<strong>CRDTs</strong>).
+          </Text>
           <List>
             <ListItem>Operation based</ListItem>
             <ListItem>State based</ListItem>
@@ -272,7 +280,7 @@ export default class Presentation extends React.Component {
           <Appear>
             <Code>new Set()</Code>
           </Appear>
-          <Notes>It's already in your language. Why is it a CRDT?</Notes>
+          <Notes>Appears: new Set. Union is your merge function.</Notes>
         </Slide>
 
         <Slide bgColor="tertiary">
@@ -301,6 +309,7 @@ export default class Presentation extends React.Component {
             textSize={30}
             lang="js"
           />
+          <Notes>I was too lazy to make a slide for associativity</Notes>
         </Slide>
 
         <Slide>
@@ -368,7 +377,7 @@ export default class Presentation extends React.Component {
           <Text>This is equivalent.</Text>
           <br />
           <CodePane
-            source={'# sums to 4\n{\n  id1: 1,\n  id2: 1,\n  id3: 2,\n}'}
+            source={'// sums to 4\n{\n  id1: 1,\n  id2: 1,\n  id3: 2,\n}'}
             textSize={30}
             theme="light"
             lang="js"
@@ -380,6 +389,117 @@ export default class Presentation extends React.Component {
           <Heading size={2}>Demo</Heading>
           <br />
           <Text>crdt.herokuapp.com/counter</Text>
+          <Notes>
+            We're not gonna build the next facebook with a G-Counter. It can't
+            model that much PII.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Image src={MOAR_CAT} />
+          <Notes>How do we get more data?</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>There are a lot of different CRDTs.</Text>
+          <Notes>You can choose more than 1. You can even nest them.</Notes>
+        </Slide>
+
+        <Slide>
+          <CodePane
+            textSize={30}
+            theme="light"
+            lang="js"
+            source={
+              '// G-set with nested G-counters\n{\n  counter1: {\n    id1: 1,\n    id2: -7,\n  },\n  counter2: {\n    id1: 20,\n    id2: 8,\n    id3: -7,\n  },\n}'
+            }
+          />
+          <Notes>
+            These are just building blocks, and there are many ways to model the
+            same thing.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <CodePane
+            textSize={30}
+            theme="light"
+            lang="python"
+            source={
+              "set([\n  ('counter1', 'id1', 3)\n  ('counter1', 'id2', 6)\n  ('counter1', 'id3', 23)\n  ('counter2', 'id1', 10)\n  ('counter2', 'id2', -6)\n])"
+            }
+          />
+          <Notes>
+            So long as you can derive a meaningful value from a merge function,
+            model it however you like.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>
+            Last Write Wins Element Set (<strong>LWW-E-Set</strong>).
+          </Text>
+          <Text>&nbsp;</Text>
+          <Text>Attach an incrementing number to every operation.</Text>
+          <Text>&nbsp;</Text>
+          <CodePane
+            textSize={30}
+            lang="python"
+            theme="light"
+            source={
+              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'the 2nd and last values were deleted')\n])\ndeletes = set([2, 4])"
+            }
+          />
+          <Notes>
+            Sometimes called a lamport timestamp. Next is about deriving state.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <CodePane
+            textSize={30}
+            lang="python"
+            theme="light"
+            source={
+              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'final')\n])\ndeletes = set([2, 4])"
+            }
+          />
+          <Text>&nbsp;</Text>
+          <Text>The current state is the value with the highest count.</Text>
+          <Text>&nbsp;</Text>
+          <Text>Obsolete values can safely be discarded.</Text>
+        </Slide>
+
+        <Slide>
+          <Text>What about conflicts?</Text>
+          <Text>&nbsp;</Text>
+          <CodePane
+            textSize={30}
+            lang="python"
+            theme="light"
+            source={
+              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value')\n])\ndeletes = set([1])"
+            }
+          />
+          <Notes>
+            Aren't these conflict free? No. They're just handled
+            deterministically. All your replicas will still converge.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>
+            Once you have shared mutable values, you can build anything.
+          </Text>
+          <Text>&nbsp;</Text>
+          <CodePane
+            textSize={30}
+            lang="python"
+            theme="light"
+            source={
+              "# Pseudo-code for an object type.\nG-Set([\n  ('<field-name>', LWW-E-Set)\n])"
+            }
+          />
         </Slide>
 
         {/*
@@ -387,8 +507,35 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
+          <Heading size={2}>Confession</Heading>
+          <Appear>
+            <Text>I skipped a ton of stuff</Text>
+          </Appear>
+          <Notes>
+            This scratches the surface, but hopefully communicates that it _can_
+            be done, it's _worth_ attempting, and it gives you a place to start
+            looking.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>words</Heading>
+          <List>
+            <ListItem>Read/write permissions</ListItem>
+            <ListItem>Metadata compaction</ListItem>
+            <ListItem>Vector clocks & causal tracking</ListItem>
+            <ListItem>Operation-based CRDTs</ListItem>
+            <ListItem>Branching, pointers, & foreign key constraints</ListItem>
+          </List>
+          <Notes>Thes are some of the things I skipped.</Notes>
+        </Slide>
+
+        <Slide>
           <Image src={LOLWUT} height={300} />
-          <Notes>Any questions?</Notes>
+          <Notes>
+            Any questions? I leave you with a quote that didn't fit anywhere
+            else in my presentation.
+          </Notes>
         </Slide>
 
         <Slide bgColor="secondary" textColor="primary">
