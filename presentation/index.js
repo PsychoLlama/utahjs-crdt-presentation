@@ -30,6 +30,8 @@ const theme = createTheme(
   }
 );
 
+const FIRE = String.fromCharCode(55357, 56613);
+
 export default class Presentation extends React.Component {
   render() {
     return (
@@ -92,6 +94,26 @@ export default class Presentation extends React.Component {
 
         <Slide bgColor="secondary">
           <Text textColor="primary">Every client has their own replica</Text>
+          <Text textColor="primary">&nbsp;</Text>
+          <Appear>
+            <Text textColor="primary">All updates are optimistic</Text>
+          </Appear>
+        </Slide>
+
+        <Slide bgColor="quaternary">
+          <Text>WHY WOULD YOU WANT THAT!</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>
+            {FIRE} divergence {FIRE}
+          </Heading>
+          <Text>Clients have radically different states</Text>
+          <List>
+            <ListItem>Operations arrive out of order</ListItem>
+            <ListItem>Retry logic duplicates operations</ListItem>
+          </List>
+          <Notes>You ask 2 replicas you get 2 different answers.</Notes>
         </Slide>
 
         <Slide>
@@ -100,7 +122,7 @@ export default class Presentation extends React.Component {
             After all the mutations propagate, all replicas are guaranteed to be
             identical.
           </Text>
-          <Notes>Strong Eventual Consistency</Notes>
+          <Notes>Strong Eventual Consistency. Out of order, duplicated.</Notes>
         </Slide>
 
         <Slide>
@@ -130,11 +152,22 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={6}>State-based merge function</Heading>
+          <Heading size={6}>Operation-based merge</Heading>
           <CodePane
-            source="merge(yourState, theirState) // newState"
+            source="yourState = merge(yourState, operation)"
+            textSize={25}
+            theme="light"
             lang="js"
           />
+          <Text>&nbsp;</Text>
+          <Heading size={6}>State-based merge</Heading>
+          <CodePane
+            source="yourState = merge(yourState, theirState)"
+            textSize={25}
+            theme="light"
+            lang="js"
+          />
+          <Notes>Set your language. Append a string at this index.</Notes>
         </Slide>
 
         <Slide>
