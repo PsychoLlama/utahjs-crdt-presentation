@@ -500,6 +500,7 @@ export default class Presentation extends React.Component {
               "# Pseudo-code for an object type.\nG-Set([\n  ('<field-name>', LWW-E-Set)\n])"
             }
           />
+          <Notes />
         </Slide>
 
         {/*
