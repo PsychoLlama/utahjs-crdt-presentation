@@ -75,7 +75,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={1}>Context</Heading>
           <Text>need moar</Text>
-          <Notes>What are they do?</Notes>
+          <Notes>What is a CRDT?</Notes>
         </Slide>
 
         {/*
@@ -166,6 +166,15 @@ export default class Presentation extends React.Component {
             <ListItem>Operation based</ListItem>
             <ListItem>State based</ListItem>
           </List>
+        </Slide>
+
+        <Slide>
+          <CodePane
+            source="state = merge(state, somethingElse)"
+            textSize={30}
+            theme="light"
+            lang="js"
+          />
         </Slide>
 
         <Slide>
@@ -342,6 +351,7 @@ export default class Presentation extends React.Component {
             Starting with the simplest example, the <strong>G-Counter</strong>.
           </Text>
           <Text>(grow-counter)</Text>
+          <Notes>Mention what it's for</Notes>
         </Slide>
 
         <Slide>
@@ -386,6 +396,20 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Text>What about ID collisions?</Text>
+          <br />
+          <CodePane
+            source={
+              "# sums to 11\nset([\n  ('id1', 1),\n  ('id1', 7),\n  ('id2', 1),\n  ('id3', 2),\n])"
+            }
+            textSize={30}
+            theme="light"
+            lang="python"
+          />
+          <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
+        </Slide>
+
+        <Slide>
           <Heading size={2}>Demo</Heading>
           <br />
           <Text>crdt.herokuapp.com/counter</Text>
@@ -426,7 +450,7 @@ export default class Presentation extends React.Component {
             theme="light"
             lang="python"
             source={
-              "set([\n  ('counter1', 'id1', 3)\n  ('counter1', 'id2', 6)\n  ('counter1', 'id3', 23)\n  ('counter2', 'id1', 10)\n  ('counter2', 'id2', -6)\n])"
+              "set([\n  ('counter1', 'id1', 3),\n  ('counter1', 'id2', 6),\n  ('counter1', 'id3', 23),\n  ('counter2', 'id1', 10),\n  ('counter2', 'id2', -6),\n])"
             }
           />
           <Notes>
@@ -440,14 +464,12 @@ export default class Presentation extends React.Component {
             Last Write Wins Element Set (<strong>LWW-E-Set</strong>).
           </Text>
           <Text>&nbsp;</Text>
-          <Text>Attach an incrementing number to every operation.</Text>
-          <Text>&nbsp;</Text>
           <CodePane
             textSize={30}
             lang="python"
             theme="light"
             source={
-              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'the 2nd and last values were deleted')\n])\ndeletes = set([2, 4])"
+              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'the 2nd and 4th values were deleted'),\n])\ndeletes = set([2, 4])"
             }
           />
           <Notes>
@@ -461,11 +483,13 @@ export default class Presentation extends React.Component {
             lang="python"
             theme="light"
             source={
-              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'final')\n])\ndeletes = set([2, 4])"
+              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'final'),\n])\ndeletes = set([2, 4])"
             }
           />
           <Text>&nbsp;</Text>
-          <Text>The current state is the value with the highest count.</Text>
+          <Text>
+            The current state is the value with the largest version number.
+          </Text>
           <Text>&nbsp;</Text>
           <Text>Obsolete values can safely be discarded.</Text>
         </Slide>
@@ -478,13 +502,39 @@ export default class Presentation extends React.Component {
             lang="python"
             theme="light"
             source={
-              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value')\n])\ndeletes = set([1])"
+              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
             }
           />
           <Notes>
             Aren't these conflict free? No. They're just handled
             deterministically. All your replicas will still converge.
           </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>Detour</Text>
+          <Notes>Talk about the reasoning of conflicts.</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>What about conflicts?</Text>
+          <Text>&nbsp;</Text>
+          <CodePane
+            textSize={30}
+            lang="python"
+            theme="light"
+            source={
+              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
+            }
+          />
+          <Notes>
+            Aren't these conflict free? No. They're just handled
+            deterministically. All your replicas will still converge.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Text>And that's everything about the LWW-E-Set.</Text>
         </Slide>
 
         <Slide>
@@ -508,19 +558,20 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
-          <Heading size={2}>Confession</Heading>
+          <Heading size={2}>Oh no</Heading>
           <Appear>
             <Text>I skipped a ton of stuff</Text>
           </Appear>
-          <Notes>
-            This scratches the surface, but hopefully communicates that it _can_
-            be done, it's _worth_ attempting, and it gives you a place to start
-            looking.
-          </Notes>
+          <Notes />
         </Slide>
 
         <Slide>
-          <Heading size={3}>words</Heading>
+          <Heading size={3}>Things I skipped</Heading>
+          <Text>
+            <small>
+              <em>Well, some of them.</em>
+            </small>
+          </Text>
           <List>
             <ListItem>Read/write permissions</ListItem>
             <ListItem>Metadata compaction</ListItem>
@@ -528,7 +579,11 @@ export default class Presentation extends React.Component {
             <ListItem>Operation-based CRDTs</ListItem>
             <ListItem>Branching, pointers, & foreign key constraints</ListItem>
           </List>
-          <Notes>Thes are some of the things I skipped.</Notes>
+          <Notes>
+            This scratches the surface, but hopefully communicates that it _can_
+            be done, it's _worth_ attempting, and it gives you a place to start
+            looking.
+          </Notes>
         </Slide>
 
         <Slide>
