@@ -39,26 +39,6 @@ export default class Presentation extends React.Component {
     return (
       <Deck transitionDuration={250} transition={['fade']} theme={theme}>
         <Slide>
-          <em>internal screaming</em>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Other nominations</Heading>
-          <List>
-            <ListItem>Why Lua is Great</ListItem>
-            <ListItem>A basic introduction to Rust</ListItem>
-            <ListItem>A thorough analysis of the Taco Bell menu</ListItem>
-            <ListItem>
-              Why 3rd dimensional tabular databases manifest actual lizard
-              people
-            </ListItem>
-          </List>
-          <Notes>
-            Some look tempting! I'll be talking about a recurring hobby
-          </Notes>
-        </Slide>
-
-        <Slide>
           <Heading size={3}>CRDTs</Heading>
           <Text>&nbsp;</Text>
         </Slide>
@@ -70,12 +50,6 @@ export default class Presentation extends React.Component {
             It's a lesser-known field in peer to peer systems. Who's heard of
             CRDTs?
           </Notes>
-        </Slide>
-
-        <Slide>
-          <Heading size={1}>Context</Heading>
-          <Text>need moar</Text>
-          <Notes>What is a CRDT?</Notes>
         </Slide>
 
         {/*
