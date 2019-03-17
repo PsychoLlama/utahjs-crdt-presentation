@@ -1,6 +1,8 @@
 import React from 'react';
 
 import createTheme from 'spectacle/lib/themes/default';
+import GOOGLE_WAVE from '../assets/google-wave.gif';
+import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
 import MOAR_CAT from '../assets/moar-cat.jpg';
 import LOLWUT from '../assets/lolwut.png';
@@ -38,23 +40,24 @@ export default class Presentation extends React.Component {
   render() {
     return (
       <Deck transitionDuration={250} transition={['fade']} theme={theme}>
-        <Slide>
-          <Heading size={5}>Safely Syncing Real-Time Data</Heading>
+        <Slide bgColor="secondary">
+          <Heading size={5} textColor="tertiary">
+            Safely Syncing Real-Time Data
+          </Heading>
           <Notes>
-            That's a little hand-wavy. What do I mean by "real-time" and
-            "safely"?
+            Welcome! I usually attend. Sean convinced me to present. This title
+            is a little hand-wavy. What do I mean by "real-time" and "safely"?
           </Notes>
         </Slide>
 
         <Slide>
-          <Heading size={5}>A real-time app...</Heading>
-          <Notes>
-            Whether that's WebSockets, data channels, or http long polling.
-          </Notes>
+          <Heading size={5}>A "real-time" app</Heading>
+          <Notes>How I'm describing it. Google Docs, Cloud 9</Notes>
 
           <Text>
-            Ensures that its local state is always using the most recent data
-            available. TODO: improve this description.
+            A category of apps that maintain local state, listen for changes
+            over the network, and incrementally update to reflect the current
+            state.
           </Text>
         </Slide>
 
@@ -62,24 +65,178 @@ export default class Presentation extends React.Component {
           <Heading size={5}>Some examples</Heading>
           <List>
             <ListItem>Collaborative text editors</ListItem>
-            <ListItem>Video conferencing</ListItem>
             <ListItem>Multiplayer games (turn-based, FPS, RPG)</ListItem>
-            <ListItem>Dashboards (climate, stocks, traffic)</ListItem>
             <ListItem>Social apps (Instagram, Twitter, Slack)</ListItem>
           </List>
         </Slide>
 
         <Slide>
-          <Heading size={3}>CRDTs</Heading>
-          <Text>(see-are-dee-tees)</Text>
+          <Heading size={5}>Things I'm ignoring</Heading>
           <Notes>
-            It's a lesser-known field in peer to peer systems. Who's heard of
-            CRDTs?
+            Dashboards generally sync one-way making them inconveniently boring
+            for this presentation. Same for conferencing since video sync is
+            mostly handled by the browser.
+          </Notes>
+          <List>
+            <ListItem>Dashboards (climate, stocks, traffic)</ListItem>
+            <ListItem>Video conferencing</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>What makes sync dangerous?</Heading>
+          <Notes>
+            Many reasons. Updates can arrive out of order, you can get
+            conflicts, you can get duplicates, and worst of all replicas can
+            permanently diverge.
+          </Notes>
+          <List>
+            <ListItem>Duplicates</ListItem>
+            <ListItem>Conflicts</ListItem>
+            <ListItem>Incorrect ordering</ListItem>
+            <ListItem>Diverging replicas</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>
+            {FIRE} divergence {FIRE}
+          </Heading>
+          <Notes>
+            This is more a database term, but as we add syncing to the frontend
+            space we become susceptible to those same problems.
+          </Notes>
+          <Text>
+            Two or more instances disagree on application state and their paths
+            have forked.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>Surely someone's solved it, right?</Heading>
+          <Notes>These are hard problems.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={1}>Story Time!</Heading>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            2009, Google Wave. At that point it was one of the most ambitious
+            real-time apps ever attempted.
+          </Notes>
+          <Image src={GOOGLE_WAVE} />
+        </Slide>
+
+        <Slide>
+          <Notes>
+            Many research papers came out of it. But it was brittle and awful.
+          </Notes>
+          <Text>
+            Collaboration was implemented using a pattern called{' '}
+            <strong>Operational Transformation</strong>
+          </Text>
+          <Text>
+            (or <strong>OT</strong> for short)
+          </Text>
+          <Text>&nbsp;</Text>
+          <Appear>
+            <Text>It was awful.</Text>
+          </Appear>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            The architecture was very centralized, so making it scale was a
+            painful endeavour.
+          </Notes>
+          <Text>
+            It was an ad-hoc pattern with edge cases, bugs, and gnarly
+            scalability issues. It was hard to write, hard to maintain, and hard
+            to prove that it worked.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>Ugh</Heading>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            You're probably thinking "Gee, this sounds peachy, I can't wait to
+            ship it". Thankfully there's an alternative.
+          </Notes>
+          <Image src={GRUMPY_CAT} />
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>A challenger appears</Heading>
+          <Notes>
+            In 2011, a group of researchers were like "nah my dudes that's
+            lamesauce hold my beer" and formalized possibly the most ambitious
+            CAP theorem tradeoff the world had ever seen. Appear: "CDRTs".
+          </Notes>
+          <Appear>
+            <Text>CRDTs</Text>
+          </Appear>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>Guarantee</Heading>
+          <Notes>
+            Their systems offer a pretty attractive guarantee called Strong
+            Eventual Consistency. No coordination, no consensus, no rollbacks.
+          </Notes>
+          <Text>
+            After all the mutations propagate, all replicas are guaranteed to be
+            identical.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Advantages</Heading>
+          <List>
+            <ListItem>Offline friendly</ListItem>
+            <ListItem>Blazingly fast</ListItem>
+            <ListItem>Server independent</ListItem>
+            <ListItem>Real-time optimized</ListItem>
+          </List>
+          <Notes>
+            Because of that guarantee, it made many hard problems _easy_.
+            Everything's an optimistic update. Streams of updates can easily be
+            turned into live user interfaces.
           </Notes>
         </Slide>
 
+        <Slide>
+          <Heading size={3}>Traction</Heading>
+          <Notes>
+            Distributed systems, database designs, file sharing, and text
+            collaboration (Atom teletype).
+          </Notes>
+          <Text>CRDTs started being used everywhere.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={6}>But there was a downside...</Heading>
+          <Notes>I lied.</Notes>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            Haha lol no downside CRDTs are perfect and they solve everything
+          </Notes>
+          <Text>I lied.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={1}>&lt;/hype&gt;</Heading>
+          <Notes>Now to the implementation.</Notes>
+        </Slide>
+
         {/*
-         * Why CRDTs are cool.
+         * How they work
          */}
 
         <Slide>
@@ -550,20 +707,11 @@ export default class Presentation extends React.Component {
               "# Pseudo-code for an object type.\nG-Set([\n  ('<field-name>', LWW-E-Set)\n])"
             }
           />
-          <Notes />
         </Slide>
 
         {/*
          * Ending
          */}
-
-        <Slide>
-          <Heading size={2}>Oh no</Heading>
-          <Appear>
-            <Text>I skipped a ton of stuff</Text>
-          </Appear>
-          <Notes />
-        </Slide>
 
         <Slide>
           <Heading size={3}>Things I skipped</Heading>
