@@ -232,7 +232,7 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={1}>&lt;/hype&gt;</Heading>
-          <Notes>Now to the implementation.</Notes>
+          <Notes>Enough hype.</Notes>
         </Slide>
 
         {/*
@@ -240,17 +240,49 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
-          <Text>Rules for collaborating on shared mutable state</Text>
-          <Appear>
-            <div>
-              <Text>&nbsp;</Text>
-              <Text>Servers optional</Text>
-            </div>
-          </Appear>
+          <Heading size={4}>How do they work?</Heading>
+        </Slide>
+
+        <Slide>
+          <Notes>Structure is mostly up to your application.</Notes>
+          <pre style={{ textAlign: 'left', fontSize: '2rem' }}>
+            onUpdate(function(update) &#123;
+            <br />
+            {'  '}crdtState = merge(crdtState, update)
+            <br />
+            {'  '}appState = derive(crdtState)
+            <br />
+            &#125;)
+          </pre>
+        </Slide>
+
+        <Slide>
+          <Notes>They mostly define what you can't do.</Notes>
+          <Text>
+            They define a set of rules for collaborating on shared mutable state
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Rules</Heading>
           <Notes>
-            Shared state: postgres. Users collaboratively mutate it with
-            PUT/POST/PATCH.
+            Because these rules are defined by researcher nerds, they all
+            correspond to mathematical properties.
           </Notes>
+          <List>
+            <ListItem>You can't depend on order</ListItem>
+            <ListItem>You can't depend on grouping</ListItem>
+            <ListItem>You can't have duplicates</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Rules</Heading>
+          <List>
+            <ListItem>Commutativity</ListItem>
+            <ListItem>Associativity</ListItem>
+            <ListItem>Idempotence</ListItem>
+          </List>
         </Slide>
 
         <Slide bgColor="secondary">
