@@ -1,3 +1,4 @@
+import 'prismjs/themes/prism-tomorrow.css';
 import React from 'react';
 
 import createTheme from 'spectacle/lib/themes/default';
@@ -6,6 +7,7 @@ import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
 import MOAR_CAT from '../assets/moar-cat.jpg';
 import LOLWUT from '../assets/lolwut.png';
+import SourceCode from './source-code';
 import 'normalize.css';
 import {
   Appear,
@@ -35,6 +37,7 @@ const theme = createTheme(
 );
 
 const FIRE = String.fromCharCode(55357, 56613);
+const TADA = String.fromCharCode(55356, 57225);
 
 export default class Presentation extends React.Component {
   render() {
@@ -240,109 +243,113 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
-          <Heading size={4}>How do they work?</Heading>
-        </Slide>
-
-        <Slide>
-          <Notes>Structure is mostly up to your application.</Notes>
-          <pre style={{ textAlign: 'left', fontSize: '2rem' }}>
-            onUpdate(function(update) &#123;
-            <br />
-            {'  '}crdtState = merge(crdtState, update)
-            <br />
-            {'  '}appState = derive(crdtState)
-            <br />
-            &#125;)
-          </pre>
+          <Heading size={4}>What exactly is it?</Heading>
         </Slide>
 
         <Slide>
           <Notes>They mostly define what you can't do.</Notes>
           <Text>
-            They define a set of rules for collaborating on shared mutable state
+            It's a set of rules for collaborating on shared mutable state.
           </Text>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Rules</Heading>
-          <Notes>
-            Because these rules are defined by researcher nerds, they all
-            correspond to mathematical properties.
-          </Notes>
-          <List>
-            <ListItem>You can't depend on order</ListItem>
-            <ListItem>You can't depend on grouping</ListItem>
-            <ListItem>You can't have duplicates</ListItem>
-          </List>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Rules</Heading>
-          <List>
-            <ListItem>Commutativity</ListItem>
-            <ListItem>Associativity</ListItem>
-            <ListItem>Idempotence</ListItem>
-          </List>
         </Slide>
 
         <Slide bgColor="secondary">
-          <Text textColor="primary">Every client has their own replica</Text>
-          <Text textColor="primary">&nbsp;</Text>
-          <Appear>
-            <Text textColor="primary">All updates are optimistic</Text>
-          </Appear>
-          <Notes>Appears: optimistic updates</Notes>
-        </Slide>
-
-        <Slide bgColor="quaternary">
-          <Text>WHY WOULD YOU WANT THAT!</Text>
-        </Slide>
-
-        <Slide>
-          <Heading size={4}>
-            {FIRE} divergence {FIRE}
-          </Heading>
-          <Text>Clients have radically different states</Text>
-          <List>
-            <ListItem>Operations arrive out of order</ListItem>
-            <ListItem>Retry logic duplicates operations</ListItem>
-          </List>
           <Notes>
-            Everyone will derive their state using a different set of
-            operations.
+            Everything but the merge function is up to you. The merge function
+            must implement a few mathematical properties.
           </Notes>
+          <SourceCode textSize={35}>
+            {['ourState = merge(ourState, theirState)']}
+          </SourceCode>
         </Slide>
 
         <Slide>
-          <Text>What about consistency??</Text>
+          <Heading size={4}>Required properties</Heading>
+          <Notes>I'll cover those in more depth shortly.</Notes>
+          <List>
+            <ListItem>Must be commutative</ListItem>
+            <ListItem>Must be associative</ListItem>
+            <ListItem>Must be idempotent</ListItem>
+          </List>
         </Slide>
 
         <Slide>
-          <Heading size={2}>Guarantee</Heading>
+          <Notes>
+            ...along with the flexibility and peace of mind that comes with.
+          </Notes>
           <Text>
-            After all the mutations propagate, all replicas are guaranteed to be
-            identical.
+            If <Code>merge(...)</Code> implements all constraints, you've got a
+            state-based CRDT {TADA}
           </Text>
-          <Notes>Strong Eventual Consistency. Out of order, duplicated.</Notes>
         </Slide>
 
         <Slide>
-          <Heading size={4}>Advantages</Heading>
-          <List>
-            <ListItem>Offline friendly</ListItem>
-            <ListItem>Blazingly fast</ListItem>
-            <ListItem>Server independent</ListItem>
-            <ListItem>Real-time optimized</ListItem>
-          </List>
           <Notes>
-            Everything's an optimistic update. Streams of updates can easily be
-            turned into live user interfaces.
+            You've released zalgo, your systems will surely descend into chaos.
+          </Notes>
+          <Text>
+            If <Code>merge(...)</Code> doesn't fully implement{' '}
+            <strong>all</strong> those properties, your system will d̫̤̎̿ͮ̈́͂͜è̺̞̼̤̜̬ͬș̝̳c͟e̸͈ͯ̎̑ͅn̛͓͎̮̞̭̖͋̌͛d̶̻̂̊̍̓ î̥̺̥̣͖͐͒ͯ̍ͥ͜n̷̖̲͉͛ͫ̇͌͊͜t͚̯̯͑ͥ̔̎̾oͮͩͤ̑́̈̑̅͗́͏͍͕
+            c̷͓̦͉̱̫͎͍̅̆ͫ́͗̽͐̄̑̋̊͢ͅh̢͛͆̊ͣ̓͆͑ͫ̎̓̾̾͌͐͊ͤ̽͏̺̤̜̤͙̬a̠̳̲̠͇̼̙̪̭͖͙͙̲̲͎͉̬ͦ̆͒̆̃̈́̊͐͢͜ͅơ̸͉͎͙̻̋͑͌ͣͧ͒̂͛̅͘͜͠s̛̯̥͎͓̻̥̞̅ͩ̀̊͟.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Commutativity</Heading>
+          <Notes>
+            If merge(...) ever assumes an update has already arrived, you've
+            broken commutativity. In practice, this is the most difficult rule.
+          </Notes>
+          <Text>
+            <Code>merge(...)</Code> can't be affected by the order of updates.
+          </Text>
+          <Text>&nbsp;</Text>
+          <SourceCode>
+            {[
+              '// These must produce identical states.',
+              'merge(merge(state, update1), update2)',
+              'merge(merge(state, update2), update1)',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Associative</Heading>
+          <Text>
+            <Code>merge(...)</Code> can't be affected by a change in update
+            grouping.
+          </Text>
+          <Text>&nbsp;</Text>
+          <SourceCode>
+            {[
+              '// These must produce identical states.',
+              'merge(merge(state, update1), update2)',
+              'merge(state, merge(update1, update2))',
+            ]}
+          </SourceCode>
+          <Notes>
+            Usually goes hand-in-hand with commutativity. Unless you're building
+            rock-paper-scissors.
           </Notes>
         </Slide>
 
         <Slide>
-          <Heading size={1}>&lt;/hype&gt;</Heading>
-          <Notes>Now to the implementation.</Notes>
+          <Heading size={3}>Idempotent</Heading>
+          <Text>
+            <Code>merge(...)</Code> can't be affected by duplicates.
+          </Text>
+          <Text>&nbsp;</Text>
+          <SourceCode>
+            {[
+              '// These must produce identical states.',
+              'merge(merge(merge(state, update), update), update)',
+              'merge(state, update)',
+            ]}
+          </SourceCode>
+          <Notes>
+            Usually goes hand-in-hand with commutativity. Unless you're building
+            rock-paper-scissors.
+          </Notes>
         </Slide>
 
         <Slide>
@@ -361,7 +368,7 @@ export default class Presentation extends React.Component {
           <CodePane
             source="state = merge(state, somethingElse)"
             textSize={30}
-            theme="light"
+            theme="external"
             lang="js"
           />
         </Slide>
@@ -371,7 +378,7 @@ export default class Presentation extends React.Component {
           <CodePane
             source="yourState = merge(yourState, operation)"
             textSize={30}
-            theme="light"
+            theme="external"
             lang="js"
           />
           <Text>&nbsp;</Text>
@@ -379,7 +386,7 @@ export default class Presentation extends React.Component {
           <CodePane
             source="yourState = merge(yourState, theirState)"
             textSize={30}
-            theme="light"
+            theme="external"
             lang="js"
           />
           <Notes>Set your language. Append a string at this index.</Notes>
@@ -549,7 +556,7 @@ export default class Presentation extends React.Component {
           <CodePane
             source={'set([-1, 3, 2]) # sums to 4'}
             textSize={30}
-            theme="light"
+            theme="external"
             lang="python"
           />
           <Notes>
@@ -566,7 +573,7 @@ export default class Presentation extends React.Component {
               "# sums to 4\nset([\n  ('id1', 1),\n  ('id2', 1),\n  ('id3', 2),\n])"
             }
             textSize={30}
-            theme="light"
+            theme="external"
             lang="python"
           />
           <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
@@ -578,7 +585,7 @@ export default class Presentation extends React.Component {
           <CodePane
             source={'// sums to 4\n{\n  id1: 1,\n  id2: 1,\n  id3: 2,\n}'}
             textSize={30}
-            theme="light"
+            theme="external"
             lang="js"
           />
           <Notes>Tuples are immutable. This must also be immutable.</Notes>
@@ -592,7 +599,7 @@ export default class Presentation extends React.Component {
               "# sums to 11\nset([\n  ('id1', 1),\n  ('id1', 7),\n  ('id2', 1),\n  ('id3', 2),\n])"
             }
             textSize={30}
-            theme="light"
+            theme="external"
             lang="python"
           />
           <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
@@ -621,7 +628,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <CodePane
             textSize={30}
-            theme="light"
+            theme="external"
             lang="js"
             source={
               '// G-set with nested G-counters\n{\n  counter1: {\n    id1: 1,\n    id2: -7,\n  },\n  counter2: {\n    id1: 20,\n    id2: 8,\n    id3: -7,\n  },\n}'
@@ -636,7 +643,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <CodePane
             textSize={30}
-            theme="light"
+            theme="external"
             lang="python"
             source={
               "set([\n  ('counter1', 'id1', 3),\n  ('counter1', 'id2', 6),\n  ('counter1', 'id3', 23),\n  ('counter2', 'id1', 10),\n  ('counter2', 'id2', -6),\n])"
@@ -656,7 +663,7 @@ export default class Presentation extends React.Component {
           <CodePane
             textSize={30}
             lang="python"
-            theme="light"
+            theme="external"
             source={
               "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'the 2nd and 4th values were deleted'),\n])\ndeletes = set([2, 4])"
             }
@@ -670,7 +677,7 @@ export default class Presentation extends React.Component {
           <CodePane
             textSize={30}
             lang="python"
-            theme="light"
+            theme="external"
             source={
               "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'final'),\n])\ndeletes = set([2, 4])"
             }
@@ -689,7 +696,7 @@ export default class Presentation extends React.Component {
           <CodePane
             textSize={30}
             lang="python"
-            theme="light"
+            theme="external"
             source={
               "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
             }
@@ -711,7 +718,7 @@ export default class Presentation extends React.Component {
           <CodePane
             textSize={30}
             lang="python"
-            theme="light"
+            theme="external"
             source={
               "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
             }
@@ -734,7 +741,7 @@ export default class Presentation extends React.Component {
           <CodePane
             textSize={30}
             lang="python"
-            theme="light"
+            theme="external"
             source={
               "# Pseudo-code for an object type.\nG-Set([\n  ('<field-name>', LWW-E-Set)\n])"
             }
