@@ -39,8 +39,34 @@ export default class Presentation extends React.Component {
     return (
       <Deck transitionDuration={250} transition={['fade']} theme={theme}>
         <Slide>
-          <Heading size={3}>CRDTs</Heading>
-          <Text>&nbsp;</Text>
+          <Heading size={5}>Safely Syncing Real-Time Data</Heading>
+          <Notes>
+            That's a little hand-wavy. What do I mean by "real-time" and
+            "safely"?
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>A real-time app...</Heading>
+          <Notes>
+            Whether that's WebSockets, data channels, or http long polling.
+          </Notes>
+
+          <Text>
+            Ensures that its local state is always using the most recent data
+            available. TODO: improve this description.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>Some examples</Heading>
+          <List>
+            <ListItem>Collaborative text editors</ListItem>
+            <ListItem>Video conferencing</ListItem>
+            <ListItem>Multiplayer games (turn-based, FPS, RPG)</ListItem>
+            <ListItem>Dashboards (climate, stocks, traffic)</ListItem>
+            <ListItem>Social apps (Instagram, Twitter, Slack)</ListItem>
+          </List>
         </Slide>
 
         <Slide>
