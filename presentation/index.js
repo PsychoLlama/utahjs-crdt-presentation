@@ -2,6 +2,7 @@ import 'prismjs/themes/prism-tomorrow.css';
 import React from 'react';
 
 import createTheme from 'spectacle/lib/themes/default';
+import SLEEPING_CAT from '../assets/sleeping-cat.jpg';
 import GOOGLE_WAVE from '../assets/google-wave.gif';
 import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
@@ -316,8 +317,7 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={3}>Associative</Heading>
           <Text>
-            <Code>merge(...)</Code> can't be affected by a change in update
-            grouping.
+            <Code>merge(...)</Code> can't be affected by a change in grouping.
           </Text>
           <Text>&nbsp;</Text>
           <SourceCode>
@@ -346,146 +346,45 @@ export default class Presentation extends React.Component {
               'merge(state, update)',
             ]}
           </SourceCode>
+        </Slide>
+
+        <Slide>
           <Notes>
-            Usually goes hand-in-hand with commutativity. Unless you're building
-            rock-paper-scissors.
+            Waaaay too many words. What does it actually look like! Show me
+            code!
           </Notes>
+          <Image src={SLEEPING_CAT} />
         </Slide>
 
         <Slide>
-          <Heading size={3}>Categories</Heading>
+          <Heading size={2}>Ready?</Heading>
+        </Slide>
+
+        <Slide>
+          <Notes>There it is. Thank you for coming to my TED talk.</Notes>
           <Text>
-            There are several different types of Conflict-free Replicated Data
-            Types (<strong>CRDTs</strong>).
-          </Text>
-          <List>
-            <ListItem>Operation based</ListItem>
-            <ListItem>State based</ListItem>
-          </List>
-        </Slide>
-
-        <Slide>
-          <CodePane
-            source="state = merge(state, somethingElse)"
-            textSize={30}
-            theme="external"
-            lang="js"
-          />
-        </Slide>
-
-        <Slide>
-          <Heading size={6}>Operation-based merge</Heading>
-          <CodePane
-            source="yourState = merge(yourState, operation)"
-            textSize={30}
-            theme="external"
-            lang="js"
-          />
-          <Text>&nbsp;</Text>
-          <Heading size={6}>State-based merge</Heading>
-          <CodePane
-            source="yourState = merge(yourState, theirState)"
-            textSize={30}
-            theme="external"
-            lang="js"
-          />
-          <Notes>Set your language. Append a string at this index.</Notes>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Categories</Heading>
-          <List>
-            <ListItem>Operation based</ListItem>
-            <ListItem>State based</ListItem>
-            <Appear>
-              <ListItem>Delta-state</ListItem>
-            </Appear>
-          </List>
-        </Slide>
-
-        {/*
-         * CRDT implementation details
-         */}
-
-        <Slide>
-          <Text>"Rules for collaborating on shared mutable state"</Text>
-          <Text>- me</Text>
-          <Text>&nbsp;</Text>
-          <Text>Where do these fit in?</Text>
-        </Slide>
-
-        <Slide>
-          <Heading size={1}>Rules</Heading>
-          <Text>
-            Making a well-behaved <Code>merge(...)</Code> function
-          </Text>
-          <Notes>Let's talk about constraints.</Notes>
-        </Slide>
-
-        <Slide bgColor="tertiary">
-          <Heading size={3} textColor="primary">
-            Commutative
-          </Heading>
-          <Text textColor="primary">
-            <Code textColor="primary">merge(...)</Code> can't depend on order of
-            updates
-          </Text>
-          <br />
-          <CodePane
-            source={
-              'merge(merge(state, update1), update2)\n// is equal to...\nmerge(merge(state, update2), update1)'
-            }
-            textSize={30}
-            lang="js"
-          />
-        </Slide>
-
-        <Slide bgColor="tertiary">
-          <Heading size={3} textColor="primary">
-            Associative
-          </Heading>
-          <Text textColor="primary">
-            Usually goes hand-in-hand with commutativity
-          </Text>
-          <Notes>Unless you're building rock-paper-scissors...</Notes>
-        </Slide>
-
-        <Slide bgColor="tertiary">
-          <Heading size={3} textColor="primary">
-            Idempotent
-          </Heading>
-          <Text textColor="primary">
-            Applying an update more than once should have no effect.
-          </Text>
-          <br />
-          <CodePane
-            source={
-              'merge(merge(state, update), update)\n// is equal to...\nmerge(state, update)'
-            }
-            textSize={30}
-            lang="js"
-          />
-          <Notes>Usually duplicates are from the network.</Notes>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>All together now</Heading>
-          <List>
-            <ListItem>Commutative</ListItem>
-            <ListItem>Associative</ListItem>
-            <ListItem>Idempotent</ListItem>
-          </List>
-          <Text>Gives you a state-based CRDT.</Text>
-          <Notes>That's a lot of words. What's it look like in practice?</Notes>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Okay, but in practice?</Heading>
-          <br />
-          <Appear>
             <Code>new Set()</Code>
+          </Text>
+          <Appear>
+            <div>
+              <br />
+              <Text>Technically the "union" function of a set.</Text>
+              <SourceCode>
+                {[
+                  'function merge(state, update) {',
+                  '  return new Set([...state, ...update])',
+                  '}',
+                ]}
+              </SourceCode>
+            </div>
           </Appear>
-          <Notes>Appears: new Set. Union is your merge function.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>Why?</Heading>
+          <Notes>
+            Set union is our merge function. Why do we consider it a CRDT?
+          </Notes>
         </Slide>
 
         <Slide bgColor="tertiary">
@@ -493,33 +392,65 @@ export default class Presentation extends React.Component {
             It's commutative
           </Heading>
           <br />
-          <CodePane
-            source={
-              'set.add(1).add(2) // {1, 2}\n// is equal to...\nset.add(2).add(1) // {1, 2}'
-            }
-            textSize={30}
-            lang="js"
-          />
+          <SourceCode>
+            {[
+              'set.add(1).add(2) // {1, 2}',
+              '// is equal to...',
+              'set.add(2).add(1) // {1, 2}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide bgColor="tertiary">
+          <Heading size={3} textColor="primary">
+            It's associative
+          </Heading>
+          <br />
+          <SourceCode>
+            {[
+              'new Set([ // {1, 2, 3}',
+              '  ...new Set().add(1).add(2), ',
+              '  ...new Set().add(3)',
+              '])',
+              '// is equal to...',
+              'new Set([ // {1, 2, 3}',
+              '  ...new Set().add(1),',
+              '  ...new Set().add(2).add(3)',
+              '])',
+            ]}
+          </SourceCode>
         </Slide>
 
         <Slide bgColor="tertiary">
           <Heading size={3} textColor="primary">
             It's idempotent
           </Heading>
+          <Notes>That's kinda the whole point...</Notes>
           <br />
-          <CodePane
-            source={
-              'set.add(1).add(1).add(1) // {1}\n// is equal to...\nset.add(1) // {1}'
-            }
-            textSize={30}
-            lang="js"
-          />
-          <Notes>I was too lazy to make a slide for associativity</Notes>
+          <SourceCode>
+            {[
+              'set.add(1).add(1).add(1) // {1}',
+              '// is equal to...',
+              'set.add(1) // {1}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            And one of the most well-researched, too. This is pretty
+            foundational. Before I move on, break for questions.
+          </Notes>
+          <Text>So yeah, it's a CRDT.</Text>
         </Slide>
 
         <Slide>
           <Heading size={3}>Grow-only set</Heading>
           <Text>It's the base of almost every other CRDT</Text>
+        </Slide>
+
+        <Slide>
+          <Image src={LOLWUT} height={300} />
         </Slide>
 
         <Slide>
@@ -541,74 +472,46 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={3}>In practice</Heading>
+          <Heading size={5}>Actually doing something useful</Heading>
           <br />
           <Text>
-            Starting with the simplest example, the <strong>G-Counter</strong>.
+            The simplest example is the <strong>Grow-Counter</strong>.
           </Text>
-          <Text>(grow-counter)</Text>
-          <Notes>Mention what it's for</Notes>
+          <Notes>It counts things.</Notes>
         </Slide>
 
         <Slide>
-          <Text>Derive the count by summing all members.</Text>
+          <Text>All members of the set are numbers.</Text>
           <br />
-          <CodePane
-            source={'set([-1, 3, 2]) # sums to 4'}
-            textSize={30}
-            theme="external"
-            lang="python"
-          />
+          <Text>To derive the current count, sum everything together.</Text>
+        </Slide>
+
+        <Slide>
+          <SourceCode>{['// Sums to 6', 'new Set([-2, 3, 5])']}</SourceCode>
           <Notes>
-            You're not storing the count, you're storing state you can derive
-            your count from. This has an obvious constraint.
+            This has an obvious constraint. You can't add the same number twice.
           </Notes>
         </Slide>
 
         <Slide>
-          <Text>Add an ID to every count</Text>
+          <Notes>
+            Normally this is done with tuples. JavaScript doesn't have tuples.
+          </Notes>
+          <Text>
+            Allow duplicates by adding an ID to every number, separated by a
+            colon.
+          </Text>
           <br />
-          <CodePane
-            source={
-              "# sums to 4\nset([\n  ('id1', 1),\n  ('id2', 1),\n  ('id3', 2),\n])"
-            }
-            textSize={30}
-            theme="external"
-            lang="python"
-          />
-          <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
-        </Slide>
-
-        <Slide>
-          <Text>This is equivalent.</Text>
-          <br />
-          <CodePane
-            source={'// sums to 4\n{\n  id1: 1,\n  id2: 1,\n  id3: 2,\n}'}
-            textSize={30}
-            theme="external"
-            lang="js"
-          />
-          <Notes>Tuples are immutable. This must also be immutable.</Notes>
-        </Slide>
-
-        <Slide>
-          <Text>What about ID collisions?</Text>
-          <br />
-          <CodePane
-            source={
-              "# sums to 11\nset([\n  ('id1', 1),\n  ('id1', 7),\n  ('id2', 1),\n  ('id3', 2),\n])"
-            }
-            textSize={30}
-            theme="external"
-            lang="python"
-          />
-          <Notes>I'm gonna rephrase this without changing the meaning.</Notes>
-        </Slide>
-
-        <Slide>
-          <Heading size={2}>Demo</Heading>
-          <br />
-          <Text>crdt.herokuapp.com/counter</Text>
+          <SourceCode>
+            {[
+              '// Sums to 9',
+              'new Set([',
+              "  'a:2',",
+              "  'b:2',",
+              "  'c:5',",
+              '])',
+            ]}
+          </SourceCode>
           <Notes>
             We're not gonna build the next facebook with a G-Counter. It can't
             model that much PII.
