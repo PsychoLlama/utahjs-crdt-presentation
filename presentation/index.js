@@ -437,20 +437,8 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Notes>
-            And one of the most well-researched, too. This is pretty
-            foundational. Before I move on, break for questions.
-          </Notes>
+          <Notes>And one of the most well-researched, too.</Notes>
           <Text>So yeah, it's a CRDT.</Text>
-        </Slide>
-
-        <Slide>
-          <Heading size={3}>Grow-only set</Heading>
-          <Text>It's the base of almost every other CRDT</Text>
-        </Slide>
-
-        <Slide>
-          <Image src={LOLWUT} height={300} />
         </Slide>
 
         <Slide>
@@ -469,6 +457,18 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Text>So no deletes.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>Grow-only set</Heading>
+          <Text>It's the base of almost every other CRDT</Text>
+          <Notes>
+            This is pretty foundational. Before I move on, break for questions.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Image src={LOLWUT} height={300} />
         </Slide>
 
         <Slide>
@@ -496,6 +496,8 @@ export default class Presentation extends React.Component {
         <Slide>
           <Notes>
             Normally this is done with tuples. JavaScript doesn't have tuples.
+            Worth noting there's an implicit step to deriving data. This is
+            almost always true.
           </Notes>
           <Text>
             Allow duplicates by adding an ID to every number, separated by a
@@ -512,6 +514,25 @@ export default class Presentation extends React.Component {
               '])',
             ]}
           </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Text>
+            There's a subtle distinction between CRDT state and app state.
+          </Text>
+          <br />
+          <SourceCode>
+            {[
+              'onUpdate(function(update) {',
+              '  crdtState = merge(crdtState, update)',
+              '  appState = derive(crdtState)',
+              '})',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Image src={MOAR_CAT} />
           <Notes>
             We're not gonna build the next facebook with a G-Counter. It can't
             model that much PII.
@@ -519,58 +540,75 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Image src={MOAR_CAT} />
-          <Notes>How do we get more data?</Notes>
-        </Slide>
-
-        <Slide>
           <Text>There are a lot of different CRDTs.</Text>
-          <Notes>You can choose more than 1. You can even nest them.</Notes>
+          <Text>Even better, you can compose them.</Text>
         </Slide>
 
         <Slide>
-          <CodePane
-            textSize={30}
-            theme="external"
-            lang="js"
-            source={
-              '// G-set with nested G-counters\n{\n  counter1: {\n    id1: 1,\n    id2: -7,\n  },\n  counter2: {\n    id1: 20,\n    id2: 8,\n    id3: -7,\n  },\n}'
-            }
-          />
+          <Heading size={3}>2-Phase Set</Heading>
           <Notes>
-            These are just building blocks, and there are many ways to model the
-            same thing.
+            Set union is incapable of modeling deletion. Good. Deletion is
+            non-commutative.
           </Notes>
+          <Text>Finally, a way to delete things.</Text>
         </Slide>
 
         <Slide>
-          <CodePane
-            textSize={30}
-            theme="external"
-            lang="python"
-            source={
-              "set([\n  ('counter1', 'id1', 3),\n  ('counter1', 'id2', 6),\n  ('counter1', 'id3', 23),\n  ('counter2', 'id1', 10),\n  ('counter2', 'id2', -6),\n])"
-            }
-          />
-          <Notes>
-            So long as you can derive a meaningful value from a merge function,
-            model it however you like.
-          </Notes>
+          <Text>Two Grow-only Sets. One for adding, one for removing.</Text>
+        </Slide>
+
+        <Slide>
+          <Notes>Pretty self-explanatory.</Notes>
+          <Text>
+            New items go in "additions". Deleted items are added to "deletions".
+          </Text>
+          <br />
+          <SourceCode>
+            {['{', '  additions: new Set(),', '  deletions: new Set(),', '}']}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Notes>Pretty self-explanatory.</Notes>
+          <Text>
+            When you derive state, hide any items that exist in the "deletions"
+            set. Caveat: things can only be added and deleted once.
+          </Text>
+          <br />
+          <SourceCode>
+            {[
+              '// The derived set should be {1, 3, 5}',
+              '// because "2" and "4" are ignored.',
+              '{',
+              '  additions: new Set([1, 2, 3, 4, 5]),',
+              '  deletions: new Set([2, 4]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Notes>It's a pretty common pattern in distributed systems.</Notes>
+          <Text>That's called "tombstoning".</Text>
         </Slide>
 
         <Slide>
           <Text>
-            Last Write Wins Element Set (<strong>LWW-E-Set</strong>).
+            Next up: The Last Write Wins Element Set (<strong>LWW-E-Set</strong>
+            ).
           </Text>
           <Text>&nbsp;</Text>
-          <CodePane
-            textSize={30}
-            lang="python"
-            theme="external"
-            source={
-              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'the 2nd and 4th values were deleted'),\n])\ndeletes = set([2, 4])"
-            }
-          />
+          <SourceCode>
+            {[
+              'adds = set([',
+              "  (1, 'hello'), ",
+              "  (3, 'world'), ",
+              "  (5, 'third update'), ",
+              "  (6, 'the 2nd and 4th values were deleted'),",
+              '])',
+              'deletes = set([2, 4])',
+            ]}
+          </SourceCode>
           <Notes>
             Sometimes called a lamport timestamp. Next is about deriving state.
           </Notes>
