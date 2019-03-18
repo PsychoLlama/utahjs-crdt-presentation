@@ -8,6 +8,7 @@ import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
 import RAISED_PAW from '../assets/raised-paw.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
 import MOAR_CAT from '../assets/moar-cat.jpg';
+import JOIN_ME from '../assets/join-me.jpg';
 import LOLWUT from '../assets/lolwut.png';
 import SourceCode from './source-code';
 import 'normalize.css';
@@ -57,17 +58,16 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={5}>A "real-time" app</Heading>
-          <Notes>How I'm describing it. Google Docs, Cloud 9</Notes>
-
           <Text>
             A category of apps that maintain local state, listen for changes
-            over the network, and incrementally update to reflect the current
-            state.
+            over the network, and incrementally update to reflect the most
+            recent state.
           </Text>
         </Slide>
 
         <Slide>
           <Heading size={5}>Some examples</Heading>
+          <Notes>How I'm describing it. Google Docs, Cloud 9</Notes>
           <List>
             <ListItem>Collaborative text editors</ListItem>
             <ListItem>Multiplayer games (turn-based, FPS, RPG)</ListItem>
@@ -201,17 +201,16 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={4}>Advantages</Heading>
+          <Notes>
+            Most of these are possible because you no longer have to wait on a
+            server to validate your change.
+          </Notes>
           <List>
+            <ListItem>Great for real-time data</ListItem>
             <ListItem>Offline friendly</ListItem>
             <ListItem>Blazingly fast</ListItem>
-            <ListItem>Server independent</ListItem>
-            <ListItem>Real-time optimized</ListItem>
+            <ListItem>Can work P2P</ListItem>
           </List>
-          <Notes>
-            Because of that guarantee, it made many hard problems _easy_.
-            Everything's an optimistic update. Streams of updates can easily be
-            turned into live user interfaces.
-          </Notes>
         </Slide>
 
         <Slide>
@@ -224,8 +223,10 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={6}>But there was a downside...</Heading>
-          <Notes>I lied.</Notes>
+          <Heading size={6}>But there is a downside...</Heading>
+          <Notes>
+            Haha lol no downside CRDTs are perfect and they solve everything
+          </Notes>
         </Slide>
 
         <Slide>
@@ -297,6 +298,10 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Text>So how do we implement those properties?</Text>
+        </Slide>
+
+        <Slide>
           <Heading size={3}>Commutativity</Heading>
           <Notes>
             If merge(...) ever assumes an update has already arrived, you've
@@ -362,14 +367,16 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Notes>There it is. Thank you for coming to my TED talk.</Notes>
+          <Notes>
+            There it is. Thank you for coming to my TED talk. Appears: union.
+          </Notes>
           <Text>
             <Code>new Set()</Code>
           </Text>
           <Appear>
             <div>
               <br />
-              <Text>Technically the "union" function of a set.</Text>
+              <Text>Technically we only care about the "union" operation.</Text>
               <SourceCode>
                 {[
                   'function merge(state, update) {',
@@ -383,9 +390,7 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={2}>Why?</Heading>
-          <Notes>
-            Set union is our merge function. Why do we consider it a CRDT?
-          </Notes>
+          <Notes>Why is set union a CRDT?</Notes>
         </Slide>
 
         <Slide bgColor="tertiary">
@@ -444,9 +449,11 @@ export default class Presentation extends React.Component {
 
         <Slide>
           <Heading size={3}>The catch?</Heading>
-          <Text>
-            You can <strong>never</strong> delete.
-          </Text>
+          <Appear>
+            <Text>
+              You can <strong>never</strong> delete.
+            </Text>
+          </Appear>
         </Slide>
 
         <Slide>
@@ -487,7 +494,7 @@ export default class Presentation extends React.Component {
           <Text>To derive the current count, sum everything together.</Text>
         </Slide>
 
-        <Slide>
+        <Slide bgColor="secondary">
           <SourceCode>{['// Sums to 6', 'new Set([-2, 3, 5])']}</SourceCode>
           <Notes>
             This has an obvious constraint. You can't add the same number twice.
@@ -740,23 +747,19 @@ export default class Presentation extends React.Component {
           </Notes>
         </Slide>
 
-        <Slide>
-          <Image src={LOLWUT} height={300} />
+        <Slide bgColor="tertiary">
+          <Heading size={4} textColor="primary">
+            Ulterior Motives
+          </Heading>
           <Notes>
-            Any questions? I leave you with a quote that didn't fit anywhere
-            else in my presentation.
+            I love CRDTs. I want to use them everywhere. Spread the word that
+            they exist, they're awesome, and build some demand. I want fabulous
+            tooling, and I'm too lazy to build it myself!
           </Notes>
-        </Slide>
-
-        <Slide bgColor="secondary" textColor="primary">
-          <Text textColor="primary">
-            You may worship C, A, or P. Choose up to two. P smites all
-            non-followers at random intervals.
-          </Text>
-          <Text>&nbsp;</Text>
-          <Text textColor="tertiary">
-            <em>- Someone on twitter</em>
-          </Text>
+          <br />
+          <Appear>
+            <Image src={JOIN_ME} />
+          </Appear>
         </Slide>
       </Deck>
     );
