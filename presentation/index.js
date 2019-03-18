@@ -5,6 +5,7 @@ import createTheme from 'spectacle/lib/themes/default';
 import SLEEPING_CAT from '../assets/sleeping-cat.jpg';
 import GOOGLE_WAVE from '../assets/google-wave.gif';
 import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
+import RAISED_PAW from '../assets/raised-paw.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
 import MOAR_CAT from '../assets/moar-cat.jpg';
 import LOLWUT from '../assets/lolwut.png';
@@ -593,85 +594,110 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Notes>AKA, a variable.</Notes>
           <Text>
             Next up: The Last Write Wins Element Set (<strong>LWW-E-Set</strong>
             ).
           </Text>
+          <br />
+          <Text>It tracks a single value over time.</Text>
+        </Slide>
+
+        <Slide>
+          <Text>
+            To derive the current state, get the value with the highest version.
+            The rest can be ignored.
+          </Text>
           <Text>&nbsp;</Text>
           <SourceCode>
             {[
-              'adds = set([',
-              "  (1, 'hello'), ",
-              "  (3, 'world'), ",
-              "  (5, 'third update'), ",
-              "  (6, 'the 2nd and 4th values were deleted'),",
-              '])',
-              'deletes = set([2, 4])',
+              '{',
+              '  deletions: new Set([]),',
+              '  additions: new Set([',
+              '    \'1:"first value"\',',
+              '    \'2:"second value"\',',
+              '    \'3:"third value"\', // latest',
+              '  ]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Text>
+            If the highest value is in the deletions set, then it's considered
+            "deleted".
+          </Text>
+          <Text>&nbsp;</Text>
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: new Set([2, 4]),',
+              '  additions: new Set([',
+              '    \'1:"first value"\',',
+              '    \'3:"third value"\',',
+              '  ]),',
+              '}',
             ]}
           </SourceCode>
           <Notes>
-            Sometimes called a lamport timestamp. Next is about deriving state.
+            Explain what happened in this example, and how to add a new value.
           </Notes>
         </Slide>
 
         <Slide>
-          <CodePane
-            textSize={30}
-            lang="python"
-            theme="external"
-            source={
-              "adds = set([\n  (1, 'hello'), \n  (3, 'world'), \n  (5, 'third update'), \n  (6, 'final'),\n])\ndeletes = set([2, 4])"
-            }
-          />
-          <Text>&nbsp;</Text>
+          <Heading size={4}>Multiple deletions</Heading>
           <Text>
-            The current state is the value with the largest version number.
+            Unlike the <strong>2P-Set</strong>, items can be added and deleted
+            more than once.
           </Text>
-          <Text>&nbsp;</Text>
-          <Text>Obsolete values can safely be discarded.</Text>
+          <br />
+          <Text>Obsolete versions can safely be discarded.</Text>
         </Slide>
 
         <Slide>
-          <Text>What about conflicts?</Text>
-          <Text>&nbsp;</Text>
-          <CodePane
-            textSize={30}
-            lang="python"
-            theme="external"
-            source={
-              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
-            }
-          />
+          <Heading size={4}>A note on conflicts</Heading>
           <Notes>
             Aren't these conflict free? No. They're just handled
             deterministically. All your replicas will still converge.
           </Notes>
+          <Text>And how to handle them.</Text>
+          <br />
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: new Set([]),',
+              '  additions: new Set([',
+              '    \'1:"Apple"\',',
+              '    \'1:"Android"\',',
+              '  ]),',
+              '}',
+            ]}
+          </SourceCode>
         </Slide>
 
         <Slide>
-          <Text>Detour</Text>
-          <Notes>Talk about the reasoning of conflicts.</Notes>
-        </Slide>
-
-        <Slide>
-          <Text>What about conflicts?</Text>
-          <Text>&nbsp;</Text>
-          <CodePane
-            textSize={30}
-            lang="python"
-            theme="external"
-            source={
-              "adds = set([\n  (1, 'conflicting'), \n  (1, 'value'),\n])\ndeletes = set([1])"
-            }
-          />
+          <Heading size={4}>More notes on conflicts</Heading>
           <Notes>
-            Aren't these conflict free? No. They're just handled
-            deterministically. All your replicas will still converge.
+            Which do you choose? In these instances, have the winning collection
+            hard-coded (e.g. writes always win over deletions).
           </Notes>
+          <br />
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: new Set([1]),',
+              '  additions: new Set([',
+              '    \'1:"Some rando value"\',',
+              '  ]),',
+              '}',
+            ]}
+          </SourceCode>
         </Slide>
 
         <Slide>
-          <Text>And that's everything about the LWW-E-Set.</Text>
+          <Notes>I've covered quite a bit. Are there questions?</Notes>
+          <Image src={RAISED_PAW} />
         </Slide>
 
         <Slide>
