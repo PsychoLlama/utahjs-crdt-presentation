@@ -248,8 +248,14 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={2}>Story time...</Heading>
+          <Heading size={4}>
+            How do <em>we</em> solve it?
+          </Heading>
           <Notes>People have tried. It's an interesting history.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={5}>People have tried</Heading>
         </Slide>
 
         <Slide>
@@ -290,14 +296,7 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={2}>Ugh</Heading>
-        </Slide>
-
-        <Slide>
-          <Notes>
-            You're probably thinking "Gee, this sounds peachy, I can't wait to
-            ship it". Thankfully there's an alternative.
-          </Notes>
+          <Notes>"Gee, you're really selling this."</Notes>
           <Image src={GRUMPY_CAT} />
         </Slide>
 
