@@ -747,6 +747,11 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Notes>It's a pretty common pattern in distributed systems.</Notes>
+          <Text>That's called "tombstoning".</Text>
+        </Slide>
+
+        <Slide>
           <Text>Caveat: things can only be added and deleted once.</Text>
           <br />
           <SourceCode>
@@ -762,8 +767,39 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Notes>It's a pretty common pattern in distributed systems.</Notes>
-          <Text>That's called "tombstoning".</Text>
+          <Text>
+            Next up: The Observed-Remove Set (<strong>OR-Set</strong>).
+          </Text>
+          <br />
+          <Text>Add and remove, more than once.</Text>
+        </Slide>
+
+        <Slide>
+          <Notes>Mixes some ideas from the G-Counter with the 2P-Set.</Notes>
+          <Text>
+            Each time you add, use an ID. Only ignore the value when all IDs
+            exist in the deletions set.
+          </Text>
+          <br />
+          <SourceCode>
+            {[
+              '{ // 2 out of the 3 were deleted.',
+              `  deletions: new Set(['id1', 'id2']),`,
+              '  additions: new Set([',
+              `    'id1:"first"',`,
+              `    'id2:"second"',`,
+              `    'id3:"third"',`,
+              '  ]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Text>
+            Unlike the <strong>2P-Set</strong>, items can be added and removed
+            more than once.
+          </Text>
         </Slide>
 
         <Slide>
@@ -819,16 +855,6 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={4}>Multiple deletions</Heading>
-          <Text>
-            Unlike the <strong>2P-Set</strong>, items can be added and deleted
-            more than once.
-          </Text>
-          <br />
-          <Text>Obsolete versions can safely be discarded.</Text>
-        </Slide>
-
-        <Slide>
           <Heading size={4}>A note on conflicts</Heading>
           <Notes>
             Aren't these conflict free? No. They're just handled
@@ -878,6 +904,53 @@ export default class Presentation extends React.Component {
               '}',
             ]}
           </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Garbage collection</Heading>
+          <Notes>Little easier on the disk footprint.</Notes>
+          <br />
+          <Text>
+            Unlike the <strong>OR-Set</strong>, obsolete versions can be
+            discarded.
+          </Text>
+        </Slide>
+
+        <Slide>
+          <Notes>This is one of my favorites, simply for its elegance.</Notes>
+          <Text>
+            Max-Change Set (<strong>MC-Set</strong>) for maximum clever.
+          </Text>
+          <br />
+          <Text>Do the same thing, but better.</Text>
+        </Slide>
+
+        <Slide>
+          <Text>
+            The highest number denotes the current value. Even numbers were
+            deleted.
+          </Text>
+          <br />
+          <SourceCode>
+            {[
+              '// Derives to "latest value".',
+              'new Set([',
+              `  '1:"added"',`,
+              `  '2',`,
+              `  '3:"added again"',`,
+              `  '5:"latest value"',`,
+              '])',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Many ways</Heading>
+          <Notes>And there are tradeoffs to all of them.</Notes>
+          <Text>
+            As with most programming, the same problem can be solved many
+            different ways.
+          </Text>
         </Slide>
 
         <Slide>
