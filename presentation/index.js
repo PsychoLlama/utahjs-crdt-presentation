@@ -1,12 +1,14 @@
 import 'prismjs/themes/prism-tomorrow.css';
 import React from 'react';
 
+import SYNCING_DATABASES from '../assets/syncing-databases.png';
 import createTheme from 'spectacle/lib/themes/default';
 import SLEEPING_CAT from '../assets/sleeping-cat.jpg';
 import GOOGLE_WAVE from '../assets/google-wave.gif';
 import GRUMPY_CAT from '../assets/grumpy-cat.jpg';
 import RAISED_PAW from '../assets/raised-paw.jpg';
 import SET_DELETE from '../assets/set-delete.svg';
+import DATABASES from '../assets/databases.png';
 import MOAR_CAT from '../assets/moar-cat.jpg';
 import JOIN_ME from '../assets/join-me.jpg';
 import LOLWUT from '../assets/lolwut.png';
@@ -14,7 +16,6 @@ import SourceCode from './source-code';
 import 'normalize.css';
 import {
   Appear,
-  CodePane,
   Deck,
   Heading,
   ListItem,
@@ -89,17 +90,51 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Heading size={6}>
+            <span style={{ fontFamily: 'Comic Sans MS' }}>
+              Safely Syncing Real-Time Data
+            </span>
+          </Heading>
+          <Notes>I did say "safely", that implies it's dangerous. Why?</Notes>
+        </Slide>
+
+        <Slide>
           <Heading size={5}>What makes sync dangerous?</Heading>
+          <Notes>Appear: let's talk about databases.</Notes>
+          <br />
+          <Appear>
+            <Text>Let's talk about databases.</Text>
+          </Appear>
+        </Slide>
+
+        <Slide>
           <Notes>
-            Many reasons. Updates can arrive out of order, you can get
-            conflicts, you can get duplicates, and worst of all replicas can
-            permanently diverge.
+            A common practice for large apps is to replicate their main database
+            into several other servers.
           </Notes>
+          <Image src={DATABASES} />
+        </Slide>
+
+        <Slide>
+          <Notes>
+            They all maintain a consistent state between themselves.
+          </Notes>
+          <Image src={SYNCING_DATABASES} />
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Thar be problems</Heading>
+          <Notes>That's very difficult.</Notes>
+        </Slide>
+
+        <Slide>
+          <Notes>Reconciling differences and trying to get back in sync.</Notes>
           <List>
+            <ListItem>Out of order updates</ListItem>
             <ListItem>Duplicates</ListItem>
+            <ListItem>Concurrent writes</ListItem>
             <ListItem>Conflicts</ListItem>
-            <ListItem>Incorrect ordering</ListItem>
-            <ListItem>Diverging replicas</ListItem>
+            <ListItem>Divergence</ListItem>
           </List>
         </Slide>
 
@@ -108,18 +143,108 @@ export default class Presentation extends React.Component {
             {FIRE} divergence {FIRE}
           </Heading>
           <Notes>
-            This is more a database term, but as we add syncing to the frontend
-            space we become susceptible to those same problems.
+            When two or more databases fall out of sync. It's very hard to get
+            them back in agreement, and can risk data loss. There are many
+            research papers about the topic.
           </Notes>
-          <Text>
-            Two or more instances disagree on application state and their paths
-            have forked.
-          </Text>
+          <Text>Two or more databases disagree on application state.</Text>
+          <br />
+          <Text>their paths have forked.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Why do we care?</Heading>
+          <Notes>This is a JavaScript meetup.</Notes>
+          <Appear>
+            <Text>
+              Because real-time data sync is essentially the same problem.
+            </Text>
+          </Appear>
+        </Slide>
+
+        <Slide>
+          <Notes>That's your app state.</Notes>
+          <Text>Every browser instance maintains its own "database".</Text>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            Sounding familiar? That network is nothing special. If anything,
+            it's worse!
+          </Notes>
+          <Text>You synchronize state using messages over a network.</Text>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            That network experiences exactly the same problems as those
+            databases.
+          </Notes>
+          <List>
+            <ListItem>Out of order updates</ListItem>
+            <ListItem>Duplicates</ListItem>
+            <ListItem>Concurrent writes</ListItem>
+            <ListItem>Conflicts</ListItem>
+            <ListItem>Divergence</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Divergence?</Heading>
+          <Notes>
+            We are not immune from divergence. Ever heard someone say "just
+            refresh the page"?
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>Conclusion:</Heading>
+          <Notes>Which naturally makes it impossible.</Notes>
+          <Appear>
+            <Text>
+              Real-time sync is dangerous because it's a{' '}
+              <strong>distributed systems problem</strong>.
+            </Text>
+          </Appear>
         </Slide>
 
         <Slide>
           <Heading size={5}>Surely someone's solved it, right?</Heading>
-          <Notes>These are hard problems.</Notes>
+          <Notes>But databases work! Hasn't someone solved it yet? No.</Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>Write locking</Heading>
+          <Notes>
+            It all boils down to write locking. Try doing that in a browser.
+          </Notes>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>That's what servers are for.</Heading>
+          <Text>They handle all the write locks.</Text>
+        </Slide>
+
+        <Slide>
+          <Text>But that's not always possible.</Text>
+        </Slide>
+
+        <Slide>
+          <Notes>Latency sensitive</Notes>
+          <List>
+            <ListItem>Multiplayer games</ListItem>
+            <ListItem>Collaborative text editing</ListItem>
+          </List>
+        </Slide>
+
+        <Slide>
+          <Notes>
+            I'm not saying this is a common pain point. I'm saying it's worth
+            seeing how they solved it.
+          </Notes>
+          <Text>
+            Imagine waiting for a round-trip request on every keystroke!
+          </Text>
         </Slide>
 
         <Slide>
