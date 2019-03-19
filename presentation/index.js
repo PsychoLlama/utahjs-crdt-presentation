@@ -48,11 +48,11 @@ export default class Presentation extends React.Component {
       <Deck transitionDuration={250} transition={['fade']} theme={theme}>
         <Slide bgColor="secondary">
           <Heading size={5} textColor="tertiary">
-            Safely Syncing Real-Time Data
+            Safely Syncing Real-Time Data Stuff
           </Heading>
           <Notes>
-            Welcome! I usually attend. Sean convinced me to present. This title
-            is a little hand-wavy. What do I mean by "real-time" and "safely"?
+            Welcome! I usually attend. Sean convinced me to present. Real time
+            data is a broad category. What exactly am I talking about?
           </Notes>
         </Slide>
 
@@ -123,7 +123,8 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
-          <Heading size={1}>Story Time!</Heading>
+          <Heading size={2}>Story time...</Heading>
+          <Notes>People have tried. It's an interesting history.</Notes>
         </Slide>
 
         <Slide>
@@ -178,9 +179,10 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={5}>A challenger appears</Heading>
           <Notes>
-            In 2011, a group of researchers were like "nah my dudes that's
-            lamesauce hold my beer" and formalized possibly the most ambitious
-            CAP theorem tradeoff the world had ever seen. Appear: "CDRTs".
+            In 2011, a group of researchers looked on in disgust. They were
+            horrified with what we'd done, so they sat back and formalized
+            possibly the most ambitious CAP theorem tradeoff the world had ever
+            seen. Appear: "CDRTs".
           </Notes>
           <Appear>
             <Text>CRDTs</Text>
@@ -197,6 +199,14 @@ export default class Presentation extends React.Component {
             After all the mutations propagate, all replicas are guaranteed to be
             identical.
           </Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={2}>So optimistic</Heading>
+          <Notes>
+            When I say updates, I'm talking about optimistic updates.
+          </Notes>
+          <Text>No servers necessary.</Text>
         </Slide>
 
         <Slide>
@@ -261,9 +271,18 @@ export default class Presentation extends React.Component {
             Everything but the merge function is up to you. The merge function
             must implement a few mathematical properties.
           </Notes>
-          <SourceCode textSize={35}>
-            {['ourState = merge(ourState, theirState)']}
-          </SourceCode>
+          <SourceCode>{['ourState = merge(ourState, theirState)']}</SourceCode>
+        </Slide>
+
+        <Slide>
+          <Heading size={3}>State-based</Heading>
+          <Notes>
+            It's pretty heavy, but easily optimized if you're just exchanging
+            patches (diffs). This is equivalent and easier to reason about.
+          </Notes>
+          <Text>
+            Convergent Replicated Data Type (<strong>CvRDT</strong>)
+          </Text>
         </Slide>
 
         <Slide>
@@ -329,8 +348,8 @@ export default class Presentation extends React.Component {
           <SourceCode>
             {[
               '// These must produce identical states.',
-              'merge(merge(state, update1), update2)',
-              'merge(state, merge(update1, update2))',
+              'merge(merge(state1, state2), state3)',
+              'merge(state1, merge(state2, state3))',
             ]}
           </SourceCode>
           <Notes>
@@ -363,6 +382,10 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Heading size={2}>Show me the code!</Heading>
+        </Slide>
+
+        <Slide>
           <Heading size={2}>Ready?</Heading>
         </Slide>
 
@@ -391,6 +414,10 @@ export default class Presentation extends React.Component {
         <Slide>
           <Heading size={2}>Why?</Heading>
           <Notes>Why is set union a CRDT?</Notes>
+        </Slide>
+
+        <Slide>
+          <Text>Because it implements all the properties.</Text>
         </Slide>
 
         <Slide bgColor="tertiary">
@@ -504,8 +531,8 @@ export default class Presentation extends React.Component {
         <Slide>
           <Notes>
             Normally this is done with tuples. JavaScript doesn't have tuples.
-            Worth noting there's an implicit step to deriving data. This is
-            almost always true.
+            Worth noting there's an implicit step. This set isn't very useful to
+            your app. It only cares about the number.
           </Notes>
           <Text>
             Allow duplicates by adding an ID to every number, separated by a
@@ -580,8 +607,23 @@ export default class Presentation extends React.Component {
           <Notes>Pretty self-explanatory.</Notes>
           <Text>
             When you derive state, hide any items that exist in the "deletions"
-            set. Caveat: things can only be added and deleted once.
+            set.
           </Text>
+          <br />
+          <SourceCode>
+            {[
+              '// The derived set should be {1, 3, 5}',
+              '// because "2" and "4" are ignored.',
+              '{',
+              '  additions: new Set([1, 2, 3, 4, 5]),',
+              '  deletions: new Set([2, 4]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Text>Caveat: things can only be added and deleted once.</Text>
           <br />
           <SourceCode>
             {[
@@ -675,9 +717,21 @@ export default class Presentation extends React.Component {
               '{',
               '  deletions: new Set([]),',
               '  additions: new Set([',
-              '    \'1:"Apple"\',',
+              '    \'1:"iPhone"\',',
               '    \'1:"Android"\',',
               '  ]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <SourceCode>
+            {[
+              'if (string1 > string2) {',
+              '  return string1',
+              '} else {',
+              '  return string2',
               '}',
             ]}
           </SourceCode>
