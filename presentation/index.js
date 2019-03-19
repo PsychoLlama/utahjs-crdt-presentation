@@ -976,10 +976,10 @@ export default class Presentation extends React.Component {
             </small>
           </Text>
           <List>
-            <ListItem>Read/write permissions</ListItem>
-            <ListItem>Metadata compaction</ListItem>
-            <ListItem>Vector clocks & causal tracking</ListItem>
             <ListItem>Operation-based CRDTs</ListItem>
+            <ListItem>JSON serializability</ListItem>
+            <ListItem>Composing into collections</ListItem>
+            <ListItem>Metadata compaction</ListItem>
             <ListItem>Branching, pointers, & foreign key constraints</ListItem>
           </List>
           <Notes>
