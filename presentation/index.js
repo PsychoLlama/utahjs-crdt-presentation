@@ -226,6 +226,7 @@ export default class Presentation extends React.Component {
         </Slide>
 
         <Slide>
+          <Notes>That means our server is the bottleneck</Notes>
           <Text>But that's not always possible.</Text>
         </Slide>
 
