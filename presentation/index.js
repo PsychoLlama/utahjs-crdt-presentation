@@ -219,7 +219,7 @@ export default class Presentation extends React.Component {
             <ListItem>Great for real-time data</ListItem>
             <ListItem>Offline friendly</ListItem>
             <ListItem>Blazingly fast</ListItem>
-            <ListItem>Can work P2P</ListItem>
+            <ListItem>Peer to peer</ListItem>
           </List>
         </Slide>
 
@@ -761,25 +761,15 @@ export default class Presentation extends React.Component {
           <Image src={RAISED_PAW} />
         </Slide>
 
-        <Slide>
-          <Text>
-            Once you have shared mutable values, you can build anything.
-          </Text>
-          <Text>&nbsp;</Text>
-          <CodePane
-            textSize={30}
-            lang="python"
-            theme="external"
-            source={
-              "# Pseudo-code for an object type.\nG-Set([\n  ('<field-name>', LWW-E-Set)\n])"
-            }
-          />
-        </Slide>
+        {/*
+         * Rando topics
+         */}
 
         {/*
          * Ending
          */}
 
+        {/*
         <Slide>
           <Heading size={3}>Things I skipped</Heading>
           <Text>
@@ -800,6 +790,7 @@ export default class Presentation extends React.Component {
             looking.
           </Notes>
         </Slide>
+        */}
 
         <Slide bgColor="tertiary">
           <Heading size={4} textColor="primary">
@@ -808,7 +799,7 @@ export default class Presentation extends React.Component {
           <Notes>
             I love CRDTs. I want to use them everywhere. Spread the word that
             they exist, they're awesome, and build some demand. I want fabulous
-            tooling, and I'm too lazy to build it myself!
+            tooling. Together, we can change the real-time landscape.
           </Notes>
           <br />
           <Appear>
