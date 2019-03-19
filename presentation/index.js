@@ -962,10 +962,71 @@ export default class Presentation extends React.Component {
         {/*
          * Rando topics
          */}
+        <Slide>
+          <Heading size={4}>JSON interop</Heading>
+          <Notes>Stretch goal.</Notes>
+          <Text>Naturally sets aren't part of JSON.</Text>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>LWW-E-Set in JSON</Heading>
+          <Notes>
+            Any ideas how we could make this JSON-friendly? (Array?)
+          </Notes>
+          <br />
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: new Set([]),',
+              '  additions: new Set([',
+              '    \'1:"first value"\',',
+              '    \'2:"second value"\',',
+              '    \'3:"third value"\', // latest',
+              '  ]),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Heading size={4}>LWW-E-Set in JSON</Heading>
+          <Notes>Objects make good deduplicators.</Notes>
+          <br />
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: {},',
+              '  additions: {',
+              `    '1:"first value"': true,`,
+              `    '2:"second value"': true,`,
+              `    '3:"third value"': true, // latest`,
+              '  }',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
+
+        <Slide>
+          <Text>Easily rehydrated.</Text>
+          <Notes>Take all the keys and plug 'em into a new set.</Notes>
+          <br />
+          <SourceCode>
+            {[
+              '{',
+              '  deletions: new Set(Object.keys(update.deletions)),',
+              '  additions: new Set(Object.keys(update.additions)),',
+              '}',
+            ]}
+          </SourceCode>
+        </Slide>
 
         {/*
          * Ending
          */}
+
+        <Slide>
+          <Heading size={2}>That's it!</Heading>
+        </Slide>
 
         {/*
         <Slide>
@@ -977,7 +1038,6 @@ export default class Presentation extends React.Component {
           </Text>
           <List>
             <ListItem>Operation-based CRDTs</ListItem>
-            <ListItem>JSON serializability</ListItem>
             <ListItem>Composing into collections</ListItem>
             <ListItem>Metadata compaction</ListItem>
             <ListItem>Branching, pointers, & foreign key constraints</ListItem>
