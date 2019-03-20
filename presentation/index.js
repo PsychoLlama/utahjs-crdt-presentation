@@ -1013,8 +1013,8 @@ export default class Presentation extends React.Component {
           <SourceCode>
             {[
               '{',
-              '  deletions: new Set(Object.keys(update.deletions)),',
-              '  additions: new Set(Object.keys(update.additions)),',
+              '  deletions: new Set(keys(update.deletions)),',
+              '  additions: new Set(keys(update.additions)),',
               '}',
             ]}
           </SourceCode>
@@ -1025,30 +1025,22 @@ export default class Presentation extends React.Component {
          */}
 
         <Slide>
-          <Heading size={2}>That's it!</Heading>
-        </Slide>
-
-        {/*
-        <Slide>
-          <Heading size={3}>Things I skipped</Heading>
-          <Text>
-            <small>
-              <em>Well, some of them.</em>
-            </small>
-          </Text>
-          <List>
-            <ListItem>Operation-based CRDTs</ListItem>
-            <ListItem>Composing into collections</ListItem>
-            <ListItem>Metadata compaction</ListItem>
-            <ListItem>Branching, pointers, & foreign key constraints</ListItem>
-          </List>
+          <Heading size={3}>There's way more</Heading>
           <Notes>
             This scratches the surface, but hopefully communicates that it _can_
             be done, it's _worth_ attempting, and it gives you a place to start
             looking.
           </Notes>
+          <List>
+            <ListItem>Operation-based CRDTs</ListItem>
+            <ListItem>Modelling collections</ListItem>
+            <ListItem>Minimizing metadata</ListItem>
+          </List>
         </Slide>
-        */}
+
+        <Slide>
+          <Heading size={2}>That's it!</Heading>
+        </Slide>
 
         <Slide bgColor="tertiary">
           <Heading size={4} textColor="primary">
